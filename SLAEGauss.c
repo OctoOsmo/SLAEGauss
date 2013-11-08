@@ -47,11 +47,28 @@ double **CreateMatrix(size_t N)
 	return matrix;
 }
 
+void DeleteMatrix(double **matrix, double N)
+{
+	size_t i;
+	for(i = 0;  i < N; ++i)
+	{
+		if(matrix[i])
+			free(matrix[i]);
+	}
+	free(matrix);
+}
+
 double *CreateVector(size_t N)
 {
     double *vec = NULL;
     vec = malloc(sizeof(double)*N);
 	return vec;
+}
+
+void DeleteVector(double *v)
+{
+	if(v)
+		free(v);
 }
 
 void PrintVector(double *v, size_t N)
@@ -107,6 +124,11 @@ int gaussSolver(double **A, double *b, double *x, size_t N)
 	int i, j, k, maxInd;
 	double s;
 	double coef = 0.0;
+	//size_t *perm = (size_t *)malloc(N*sizeof(size_t));
+
+	////init permutation vector
+	//for(i = 0; i < N; ++i)
+	//	perm[i] = i;
 
 	for(i = 0; i < N; ++i)
 	{
@@ -151,6 +173,11 @@ int main(void)
 	gaussSolver(matrix, vec, res, N);
 	PrintVector(res, N);
 
-	//TODO: free mem
+	//free mem
+	//TODO: crash in DeleteVector(res)
+	DeleteVector(res);
+	DeleteMatrix(matrix, N);
+	DeleteVector(vec);
+
     return 0;
 }
